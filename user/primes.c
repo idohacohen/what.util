@@ -2,6 +2,11 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
+/*
+ * @brief print the prime numbers that are in pipe
+ *
+ * @param inp the input pipe
+ */
 void
 print_primes(int (*inp)[])
 {
