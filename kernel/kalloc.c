@@ -80,3 +80,19 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+
+// Return the number of free bytes in the kernel memory pool.
+uint64
+countmem(void)
+{
+  int n = 0;
+  struct run *r;
+  r = kmem.freelist;
+  while (r)
+  {
+    r = r->next;
+    n++;
+  }
+  return n*4096;
+}

@@ -295,6 +295,7 @@ fork(void)
     return -1;
   }
   np->sz = p->sz;
+  np->tracemask = p->tracemask;
 
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
@@ -650,6 +651,21 @@ either_copyin(void *dst, int user_src, uint64 src, uint64 len)
     memmove(dst, (char*)src, len);
     return 0;
   }
+}
+
+// Return the number of processes.
+uint64
+count_procs(void)
+{
+  uint64 n = 0;
+  for (int i = 0; i < NPROC; i++)
+  {
+    if (proc[i].state != UNUSED)
+    {
+      n++;
+    }
+  }
+  return n;
 }
 
 // Print a process listing to console.  For debugging.

@@ -1,0 +1,13 @@
+the function that called syscall() is usertrap() frm the file kernel/trap.c
+
+7
+
+the spp byte is 0 so the previous mode was usertrap
+
+lw	a3,0(zero) (i got a different sepc than in the instructions)
+a3 is the register corresponding with num
+
+the kernel crashed because it tried to load to a variable data from a location it doesn't have access to
+the scause shown is 'd' which means 13 which means there was a problem with the load page.
+
+the pid is 1

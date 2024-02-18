@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "sysinfo.h"
 
 uint64
 sys_exit(void)
@@ -90,4 +91,35 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+// set the process's trace mask
+uint64
+sys_trace(void)
+{
+  struct proc *p = myproc();
+  int mask;
+
+  argint(0, &mask);
+  p->tracemask = mask;
+  return 0;
+}
+
+// return a count of the number of processes
+// and the amount of free memory in the system
+uint64
+sys_sysinfo(void)
+{
+  struct proc *p = myproc();
+  struct sysinfo info;
+  uint64 out;
+
+  argaddr(0, &out);
+  info.freemem = countmem();
+  info.nproc = count_procs();
+  if (copyout(p->pagetable, out, (char *)&info, sizeof(struct sysinfo)) < 0)
+  {
+    return -1;
+  }
+  return 0;
 }
