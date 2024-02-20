@@ -7,7 +7,7 @@
  *
  * @param inp the input pipe
  */
-void
+int
 print_primes(int (*inp)[])
 {
     int buff;
@@ -19,7 +19,7 @@ print_primes(int (*inp)[])
     {
         close((*inp)[0]);
         close((*inp)[1]);
-        exit(0);
+        return 0;
     }
     int outp[2];
     pipe(outp);
@@ -40,7 +40,7 @@ print_primes(int (*inp)[])
     close((*inp)[0]);
     }
     wait((int *) 0);
-    exit(0);
+    return 0;
 }
 
 int
