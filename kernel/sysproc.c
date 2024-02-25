@@ -71,10 +71,44 @@ sys_sleep(void)
 
 
 #ifdef LAB_PGTBL
+/*
+* @brief: This function is used to find how many of the first 'amount' pages
+* have been accessed.
+*
+* @param: buf - the address of the buffer that contains the pages
+* @param: amount - the number of pages to check
+* @param: abits - the address of the buffer that will contain the access bits
+*
+* @return: 0 on success, -1 on failure
+*/
 int
 sys_pgaccess(void)
 {
-  // lab pgtbl: your code here.
+  uint64 buf;
+  int amount;
+  uint64 abits;
+
+  argaddr(0, &buf);
+  argint(1, &amount);
+  argaddr(2, &abits);
+
+  int out = 0;
+
+
+  struct proc *p = myproc();
+  for (int i = 0; i < amount; i++)
+  {
+    pte_t *pte = walk(p->pagetable, buf + i*PGSIZE, 0);
+    if ((*pte & PTE_A) != 0)
+    {
+      out |= (1 << i);
+    }
+    *pte &= ~(PTE_A);
+  }
+  if (copyout(p->pagetable, abits, (char *)&out, amount/8) < 0)
+  {
+    return -1;
+  }
   return 0;
 }
 #endif
@@ -100,3 +134,4 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+

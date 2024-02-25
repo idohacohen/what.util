@@ -438,6 +438,14 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   }
 }
 
+
+/*
+* @brief: This function goes through the page table and prints out the PTEs
+* that are valid as well as the physical addresses that they point to.
+*
+* @param: pagetable - the page table to print
+* @param: level - the level of the page table
+*/
 void
 printpgtbl(pagetable_t pagetable, int level)
 {
@@ -470,6 +478,8 @@ printpgtbl(pagetable_t pagetable, int level)
   }
 }
 
+// print all the PTEs in a page table
+// using the printpgtbl function
 void
 vmprint(pagetable_t pagetable)
 {
