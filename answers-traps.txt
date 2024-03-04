@@ -1,0 +1,21 @@
+The call arguments are stored in the registers a0-a7,
+In main, the register that holds 13 is a2.
+
+f() was called before line 26 where the the program inserts 12 
+into the register after it had computed f(8)
+g() is copied into f() and is not really called.
+
+printf() is located on line 64a on the code which is in line 1114 in the file.
+
+The value of $ra after printf is called is its pc+4 which is 38
+
+The output is HE110 World.
+In order for the code to run on a big endian system we just need to flip the bytes in i.
+0x00646c72 -> 0X726c6400.
+the value of 57616 does not need to be changed as it is read as a hex
+so it is stored and read the same way.
+
+It print some random number that happened to be in the stack beforehand.
+It does this because it expect more arguments then were given and just reads
+the value that is where the extra argument was supposed to be.
+

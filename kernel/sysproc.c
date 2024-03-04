@@ -67,6 +67,7 @@ sys_sleep(void)
     sleep(&ticks, &tickslock);
   }
   release(&tickslock);
+  backtrace();
   return 0;
 }
 
@@ -90,4 +91,47 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+/*
+* @brief: initializes the alarm handler and the number of ticks
+*
+* @param: ticks - the number of ticks to wait before calling the handler
+* @param: handler - the address of the handler
+*
+* @return: 0
+*
+* @note: if ticks is 0, the alarm is disabled
+*/
+uint64
+sys_sigalarm(void)
+{
+  struct proc *p = myproc();
+  int ticks;
+  uint64 handler;
+  argint(0, &ticks);
+  argaddr(1, &handler);
+  p->alarmhandler = handler;
+  p->alarmticks = ticks;
+  return 0;
+}
+
+
+/*
+* @brief: returns to the handler after the alarm has been called, 
+*         resetting the alarm and the trapframe
+*
+* @return: 0
+*/
+uint64
+sys_sigreturn(void)
+{
+  struct proc *p = myproc();
+  p->passedticks = 0;
+  for (uint64 i = 0; i < sizeof(struct trapframe); i+=8)
+  {
+    p->trapframe[i] = p->prevtrapframe[i];
+  }
+  usertrapret();
+  return 0;
 }
