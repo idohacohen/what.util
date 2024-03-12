@@ -1,0 +1,8 @@
+there are keys missing because the put function breaks if it gets to an empty entry.
+between lines 49 and 50, the entry might have created and the function adds a value to it.
+thus we get a value assigned to an entry without the key.
+the key is then not found.
+
+I failed to understand why pthread_mutex_init is needed, it works without it just fine.
+Maybe it's initializing automatically?
+
