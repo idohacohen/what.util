@@ -1,8 +1,10 @@
 I suppose dup and link can be used this way as
 they only change how the process itself calls files.
+In order to do that we can implement the fd list (p->ofile) in the user space.
+Then adding and removing fd's to opened files can be done by copying existing fds.
 
 Page 0 contains the text or the code the process runs.
-page 2 is the stack.
+page 2 is a guard paged between te data and the stack.
 page 1 is the data, in user mode it can be read but not written to.
 
-Im not sure whts the third to last page, maybe the kstack.
+The third to last page is th heap. Its address is rather far away from the trapframe acounting for the unused space in the chart.
